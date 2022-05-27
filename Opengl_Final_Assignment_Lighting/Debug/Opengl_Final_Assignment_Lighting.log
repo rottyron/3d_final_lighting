@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\rotty\Documents\Github\Opengl_Final_Assignment_Lighting\Opengl_Final_Assignment_Lighting\main.cpp(19,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\rotty\Documents\Github\Opengl_Final_Assignment_Lighting\Opengl_Final_Assignment_Lighting\main.cpp(19,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\rotty\Documents\Github\Opengl_Final_Assignment_Lighting\Opengl_Final_Assignment_Lighting\main.cpp(34,26): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\Users\rotty\Documents\Github\Opengl_Final_Assignment_Lighting\Opengl_Final_Assignment_Lighting\main.cpp(34,19): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+  Opengl_Final_Assignment_Lighting.vcxproj -> C:\Users\rotty\Documents\Github\Opengl_Final_Assignment_Lighting\Debug\Opengl_Final_Assignment_Lighting.exe
