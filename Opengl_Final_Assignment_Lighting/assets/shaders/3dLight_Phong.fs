@@ -6,7 +6,7 @@ in vec3 FragNormal;
 
 //uniform inputs
 uniform sampler2D ImageTexture0;
-uniform float AmbientStrength = 1.0f;
+uniform float AmbientStrength = 0.2f;
 uniform vec3 AmbientColor = vec3(1.0f,1.0f,1.0f);
 
 //output

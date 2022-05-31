@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CSkybox.cpp" />
     <ClCompile Include="CSphereMesh.cpp" />
     <ClCompile Include="CSphereRender.cpp" />
     <ClCompile Include="CTimeManager.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CSkybox.h" />
     <ClInclude Include="CSphereMesh.h" />
     <ClInclude Include="CSphereRender.h" />
     <ClInclude Include="CTimeManager.h" />
@@ -165,6 +167,8 @@
   <ItemGroup>
     <None Include="assets\shaders\3dLight_Phong.fs" />
     <None Include="assets\shaders\3D_Normals.vs" />
+    <None Include="assets\shaders\Skybox.fs" />
+    <None Include="assets\shaders\Skybox.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

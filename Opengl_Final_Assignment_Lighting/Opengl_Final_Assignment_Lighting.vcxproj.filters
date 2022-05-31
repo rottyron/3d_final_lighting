@@ -33,6 +33,9 @@
     <ClCompile Include="ShaderLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CSkybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
@@ -53,12 +56,21 @@
     <ClInclude Include="ShaderLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CSkybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\3D_Normals.vs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\3dLight_Phong.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\Skybox.fs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

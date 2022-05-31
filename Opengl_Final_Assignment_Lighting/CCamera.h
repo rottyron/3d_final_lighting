@@ -10,6 +10,7 @@ public:
 	glm::mat4* GetProjectionMat() { return &projectionMat; }
 	glm::mat4* GetViewMat() { return &viewMat; }
 	glm::mat4 CreatePVM(glm::mat4* _model) { return projectionMat * viewMat * *_model; }
+	glm::mat4 GetPVMat() { return projectionMat * viewMat; }
 	
 private:
 	//View and projection for the PVM

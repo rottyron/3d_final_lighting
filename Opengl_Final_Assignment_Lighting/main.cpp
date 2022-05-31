@@ -4,6 +4,7 @@
 #include "CSphereMesh.h"
 #include "CSphereRender.h"
 #include "CTimeManager.h"
+#include "CSkybox.h"
 
 GLFWwindow* mainWindow;
 
@@ -12,6 +13,9 @@ CSphereRender* sphereRender;
 //SphereMesh 1
 CSphereMesh* sphereMesh_1;
 CCamera* mainCamera;
+
+//Skybox
+CSkybox* skybox;
 //Inital setup for the classes and opengl
 void InitialSetup()
 {
@@ -28,13 +32,15 @@ void InitialSetup()
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 	//Re-enable for release, off for debug
-	glEnable(GL_CULL_FACE); 
+	//glEnable(GL_CULL_FACE); 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//Set to proper variables with a utilities static class
 	glViewport(0, 0, 800.f, 800.f);
 	sphereRender = new CSphereRender(1.f, 40);
 	sphereMesh_1 = new CSphereMesh("assets/textures/earf.jpg");
 	mainCamera = new CCamera();
+	//skybox init, takes the camera pointer for creating pvms
+	skybox = new CSkybox(mainCamera);
 }
 
 //Updates all targets
@@ -43,6 +49,7 @@ void Update()
 	glfwPollEvents();
 	mainCamera->Update();
 	sphereMesh_1->Update();
+	skybox->Update();
 
 }
 
@@ -53,6 +60,7 @@ void Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	PVM = mainCamera->CreatePVM(sphereMesh_1->GetModel());
 	sphereRender->Render(sphereMesh_1->GetTexture(), sphereMesh_1->GetModel(), &PVM);
+	skybox->Render();
 	glfwSwapBuffers(mainWindow);
 }
 
