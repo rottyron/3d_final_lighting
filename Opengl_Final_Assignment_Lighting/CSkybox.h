@@ -6,7 +6,7 @@ class CSkybox
 public:
 	CSkybox(CCamera* _camera);
 	~CSkybox();
-	void Update();
+	void Update(float _deltaTime);
 	void Render();
 private:
 	std::string filePaths[6];

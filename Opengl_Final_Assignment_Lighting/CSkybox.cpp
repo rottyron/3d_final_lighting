@@ -138,7 +138,7 @@ CSkybox::~CSkybox()
 {
 }
 
-void CSkybox::Update()
+void CSkybox::Update(float _deltaTime)
 {
 	modelMat = glm::scale(glm::mat4(), glm::vec3(2000.0f, 2000.0f, 2000.0f));
 	PVM = cam->CreatePVM(&modelMat);

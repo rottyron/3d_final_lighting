@@ -6,7 +6,7 @@ class CSphereMesh
 public:
 	CSphereMesh(std::string _texture);
 	~CSphereMesh();
-	void Update();
+	void Update(float _deltaTime);
 	glm::mat4* GetModel() { return &modelMat; }
 	GLuint* GetTexture() { return &texture; }
 

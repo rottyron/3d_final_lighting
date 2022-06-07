@@ -38,7 +38,7 @@ CSphereMesh::~CSphereMesh()
 {
 }
 
-void CSphereMesh::Update()
+void CSphereMesh::Update(float _deltaTime)
 {
 	translationMat = glm::translate(glm::mat4(), objPosition);
 	rotationMat = glm::rotate(glm::mat4(), glm::radians(objAngle), glm::vec3(0.1f, 0.0f, 0.0f));
