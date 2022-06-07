@@ -165,7 +165,8 @@
     <ClInclude Include="ShaderLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\3dLight_Phong.fs" />
+    <None Include="assets\shaders\3dLight_BlinnPhongRim.fs" />
+    <None Include="assets\shaders\3dLight_BlinnPhong.fs" />
     <None Include="assets\shaders\3D_Normals.vs" />
     <None Include="assets\shaders\Skybox.fs" />
     <None Include="assets\shaders\Skybox.vs" />

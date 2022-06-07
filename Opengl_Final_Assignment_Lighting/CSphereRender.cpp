@@ -74,7 +74,7 @@ CSphereRender::CSphereRender(float _radius, int _fidelity)
 	}
 	//**DEFAULT TEXTURE CREATE**\\
 	//get the data for the image
-	unsigned char* ImageData = stbi_load("assets/textures/earf.jpg",
+	unsigned char* ImageData = stbi_load("assets/textures/jerma.jpg",
 		&imageWidth, &imageHeight, &imageComponents, 0);
 
 	//Texture Binding

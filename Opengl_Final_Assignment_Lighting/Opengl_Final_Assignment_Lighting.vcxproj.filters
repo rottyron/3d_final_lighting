@@ -64,13 +64,16 @@
     <None Include="assets\shaders\3D_Normals.vs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="assets\shaders\3dLight_Phong.fs">
+    <None Include="assets\shaders\3dLight_BlinnPhong.fs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\Skybox.vs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\Skybox.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\3dLight_BlinnPhongRim.fs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

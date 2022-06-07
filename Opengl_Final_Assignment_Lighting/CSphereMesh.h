@@ -9,6 +9,7 @@ public:
 	void Update(float _deltaTime);
 	glm::mat4* GetModel() { return &modelMat; }
 	GLuint* GetTexture() { return &texture; }
+	void setObjPos(float _x, float _y, float _z) { objPosition = glm::vec3(_x, _y, _z); }
 
 private:
 	glm::vec3 objPosition;
