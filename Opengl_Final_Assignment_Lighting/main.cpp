@@ -32,6 +32,7 @@ float previousX = 400; //initialize the value so the camera doesn't explode
 float previousY = 400;
 float xDif;
 float yDif;
+
 //Inital setup for the classes and opengl
 void InitialSetup()
 {
@@ -49,7 +50,9 @@ void InitialSetup()
 	stbi_set_flip_vertically_on_load(true);
 	glEnable(GL_DEPTH_TEST);
 	//Re-enable for release, off for debug
-	//glEnable(GL_CULL_FACE); 
+	glEnable(GL_CULL_FACE); 
+	//Anti-Aliasing multi sampling active
+	glEnable(GL_MULTISAMPLE);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//Set to proper variables with a utilities static class
 	glViewport(0, 0, 800.f, 800.f);
@@ -61,7 +64,7 @@ void InitialSetup()
 		{
 			spheres.push_back(new CSphereMesh("assets/textures/jerma.jpg"));
 		}
-		spheres.push_back(new CSphereMesh("assets/textures/earf.jpg"));
+		spheres.push_back(new CSphereMesh("assets/textures/Kronk.jpg"));
 		spheres[i]->setObjPos(rand() % 15, rand() % 15, rand() % 15);
 	}
 	mainCamera = new CCamera();
@@ -150,6 +153,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	InitialSetup();
 	//General Render Pipeline
 	while (glfwWindowShouldClose(mainWindow) == false)

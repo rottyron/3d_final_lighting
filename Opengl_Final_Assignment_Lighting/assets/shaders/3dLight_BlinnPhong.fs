@@ -6,6 +6,18 @@ struct pointLight
 	vec3 color;
 	float ambientStrength;
 	float specularStrength;
+
+	float attenuationConstant;
+	float attenuationLinear;
+	float attenuationExponent;
+};
+	
+struct directionalLight	
+{
+	glm::vec3 direction;
+	glm::vec3 color;
+	float ambientStrength;
+	float specularStrength;
 };
 
 //Vertex Inputs
@@ -43,12 +55,19 @@ vec3 CalculateLight_Point(pointLight _light)
 	//Blin phong model
 	vec3 HalfwayVector = normalize(-LightDir + ReverseViewDir);
 	float SpecularReflectivity = pow(max(dot(Normal, HalfwayVector), 0.0f), Shininess);
+
+	//Calculate and apply attenuation
+	float distance = length(_light.position - FragPos);
+	float attenuation = _light.attenuationConstant + (_light.attenuationLinear * distance) + (_light.attenuationExponent * pow(distance, 2));
 	
+	
+	//Calculate the final specular component
 	vec3 Specular = _light.specularStrength * SpecularReflectivity * _light.color;
 
 	//combine the lighting components
-	vec3 Light = Ambient + Diffuse + Specular;
-	return Light;
+	vec3 combinedLight = Ambient + Diffuse + Specular;
+	combinedLight /= attenuation;
+	return combinedLight;
 }
 
 //Main
@@ -57,7 +76,10 @@ void main()
 	vec3 LightOutput = vec3(0.0f,0.0f,0.0f);
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)				//For loop, loops through all the lights and adds them together
 	{
-		LightOutput += CalculateLight_Point(pointLights[i]);
+		if(pointLights[i].attenuationConstant != 0.0f)
+		{
+			LightOutput += CalculateLight_Point(pointLights[i]);
+		}
 	}
 	FinalColor = vec4(LightOutput, 1.0f) * texture(ImageTexture0, FragTexCoords);
 }
