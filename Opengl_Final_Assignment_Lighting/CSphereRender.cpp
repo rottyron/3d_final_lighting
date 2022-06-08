@@ -1,4 +1,7 @@
 #include "CSphereRender.h"
+#include "CLightManager.h"
+
+CLightManager* lights = new CLightManager();
 
 CSphereRender::CSphereRender(float _radius, int _fidelity)
 {
@@ -132,6 +135,7 @@ CSphereRender::~CSphereRender()
 {
 }
 
+//Render the sphere with the minimum reqs
 void CSphereRender::Render(glm::mat4* _modelMat, glm::mat4* _PVM)
 {
 	glUseProgram(sphereProg);
@@ -152,6 +156,7 @@ void CSphereRender::Render(glm::mat4* _modelMat, glm::mat4* _PVM)
 	glUseProgram(0);
 }
 
+//Render the sphere with a custom texture
 void CSphereRender::Render(GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM)
 {
 	glUseProgram(sphereProg);
@@ -172,7 +177,7 @@ void CSphereRender::Render(GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _P
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
-
+//Render the sphere with a custom shader and a custom texture
 void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM)
 {
 	glUseProgram(*_prog);
@@ -186,6 +191,8 @@ void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat
 
 	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
 	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
+
+	lights->PassPointLights(_prog);
 
 	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);

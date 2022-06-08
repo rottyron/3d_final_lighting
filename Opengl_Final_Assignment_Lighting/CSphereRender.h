@@ -26,8 +26,8 @@ private:
 
 	//defaults
 	//Creates the default program to use for this, the render can be overloaded
-	GLuint sphereProg = ShaderLoader::CreateProgram("assets/shaders/3D_Normals.vs", "assets/shaders/3dLight_BlinnPhongRim.fs");
-	GLuint sphereRimProg = ShaderLoader::CreateProgram("assets/shaders/3D_Normals.vs", "assets/shaders/3dLight_BlinnPhong.fs");
+	GLuint sphereRimProg = ShaderLoader::CreateProgram("assets/shaders/3D_Normals.vs", "assets/shaders/3dLight_BlinnPhongRim.fs");
+	GLuint sphereProg = ShaderLoader::CreateProgram("assets/shaders/3D_Normals.vs", "assets/shaders/3dLight_BlinnPhong.fs");
 	//Default texture
 	GLuint texture;
 	int imageWidth;

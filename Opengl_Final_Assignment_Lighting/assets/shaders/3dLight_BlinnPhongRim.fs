@@ -35,7 +35,7 @@ void main()
 	float DiffuseStrength = max(dot(Normal, -LightDir), 0.0f);
 	vec3 Diffuse = DiffuseStrength * LightColor;
 	
-	//Specula stuff
+	//Specular stuff
 	vec3 ReverseViewDir = normalize(CameraPos - FragPos);
 	
 	//Phong model

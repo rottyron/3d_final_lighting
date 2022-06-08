@@ -1,21 +1,27 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "includeStorage.h"
+#include <vector>
+#include <time.h>
 #include "CCamera.h"
 #include "CSphereMesh.h"
 #include "CSphereRender.h"
 #include "CTimeManager.h"
 #include "CSkybox.h"
-
+#include "CLightManager.h"
+static const int MAX_SPHERES = 15;
 GLFWwindow* mainWindow;
 
 //SphereRenderer
 CSphereRender* sphereRender;
+std::vector<CSphereMesh*> spheres;
 //SphereMesh 1
 CSphereMesh* sphereMesh_1;
 CSphereMesh* sphereMesh_2;
 CCamera* mainCamera;
 
 CTimeManager* timeManager;
+
+CLightManager* managedLights;
 
 //Skybox
 CSkybox* skybox;
@@ -48,13 +54,21 @@ void InitialSetup()
 	//Set to proper variables with a utilities static class
 	glViewport(0, 0, 800.f, 800.f);
 	sphereRender = new CSphereRender(1.f, 40);
-	sphereMesh_1 = new CSphereMesh("assets/textures/jerma.jpg");
-	sphereMesh_2 = new CSphereMesh("assets/textures/earf.jpg");
-	sphereMesh_2->setObjPos(2.f, 2.f, 2.f);
+	//Randomly generate positions for the orbs
+	for (int i = 0; i < MAX_SPHERES; i++)
+	{
+		if (i == 0)
+		{
+			spheres.push_back(new CSphereMesh("assets/textures/jerma.jpg"));
+		}
+		spheres.push_back(new CSphereMesh("assets/textures/earf.jpg"));
+		spheres[i]->setObjPos(rand() % 15, rand() % 15, rand() % 15);
+	}
 	mainCamera = new CCamera();
 	//skybox init, takes the camera pointer for creating pvms
 	skybox = new CSkybox(mainCamera);
 	timeManager = new CTimeManager();
+	managedLights = new CLightManager();
 }
 
 //Setup callbacks
@@ -67,16 +81,18 @@ void CursorInput(GLFWwindow* _mainWindow, double currentPosX, double currentPosY
 	yDif = glm::min(yDif, 89.8f);		//Clamp the mouse rotaions below 90 to avoid gimble locking, 89.9 has not enough margin for error.
 	yDif = glm::max(yDif, -89.8f);
 
+
 										//Raw math calculations for roll pitch and yaw
-										// calculate to radians **haha glm let's me just call a function ;-;)
+										//convert to radians
 										//yaw: cos(difference in x)*cos(difference in y)	rotation around the x
 										//pitch: (sin(difference in y)		rotation around the y
 										//roll: sin(difference in x)*cos(difference in y)	rotation around the z
 
-	glm::vec3 rotation; //calculating the rotation vector
-	rotation.x = cos(glm::radians(xDif)) * cos(glm::radians(yDif));		//rotation about the x axis *between 180 -180 (left/right)
-	rotation.y = sin(glm::radians(yDif));								//Rotation about the y axis, between -90 and 90 degrees(up/down)
-	rotation.z = sin(glm::radians(xDif)) * cos(glm::radians(yDif));		//rotation about the z axis (between 180 and -180 degrees(roll)
+	glm::vec3 rotation = glm::vec3(
+		cos(glm::radians(xDif)) * cos(glm::radians(yDif)),		//rotation about the x axis *between 180 -180 (left/right)
+		sin(glm::radians(yDif)),								//Rotation about the y axis, between -90 and 90 degrees(up/down)
+		sin(glm::radians(xDif)) * cos(glm::radians(yDif)));		//rotation about the z axis (between 180 and -180 degrees(roll)
+ 
 	mainCamera->AddCameraRotation(glm::normalize(rotation) * timeManager->GetDeltaTime());	//Apply the new vector to the camera, normalize and multiply by deltatime
 
 }
@@ -88,9 +104,15 @@ void Update()
 	glfwPollEvents();
 	glfwSetCursorPosCallback(mainWindow, CursorInput);
 	mainCamera->Update(mainWindow, timeManager->GetDeltaTime());
-	sphereMesh_1->Update(timeManager->GetDeltaTime());
-	sphereMesh_2->Update(timeManager->GetDeltaTime());
+	for (int i = 0; i < MAX_SPHERES; i++)						//Update all the orbs
+	{
+		if (spheres[i] != nullptr)
+		{
+			spheres[i]->Update(timeManager->GetDeltaTime());
+		}
+	}
 	skybox->Update(timeManager->GetDeltaTime());
+	managedLights->Update(timeManager->GetDeltaTime());
 
 }
 
@@ -99,10 +121,22 @@ void Render()
 {
 	glm::mat4 PVM;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	PVM = mainCamera->CreatePVM(sphereMesh_1->GetModel());
-	sphereRender->Render(sphereRender->GetSphereProg(), sphereMesh_1->GetTexture(), sphereMesh_1->GetModel(), &PVM);
-	PVM = mainCamera->CreatePVM(sphereMesh_2->GetModel());
-	sphereRender->Render(sphereRender->GetRimProg(), sphereMesh_2->GetTexture(), sphereMesh_2->GetModel(), &PVM);
+	for (int i = 0; i < MAX_SPHERES; i++)
+	{
+		if (spheres[i] != nullptr)				//Render the orbs appropriately 
+		{
+			if (i == 0)
+			{
+				PVM = mainCamera->CreatePVM(spheres[i]->GetModel());
+				sphereRender->Render(sphereRender->GetRimProg(), spheres[i]->GetTexture(), spheres[i]->GetModel(), &PVM);
+			}
+			else
+			{
+				PVM = mainCamera->CreatePVM(spheres[i]->GetModel());
+				sphereRender->Render(sphereRender->GetSphereProg(), spheres[i]->GetTexture(), spheres[i]->GetModel(), &PVM);
+			}
+		}
+	}
 	skybox->Render();
 	glfwSwapBuffers(mainWindow);
 }
@@ -110,6 +144,8 @@ void Render()
 //Main entry for the program
 int main()
 {
+	//set the rng seed
+	srand(time(0));
 	glfwInit();
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

@@ -26,8 +26,8 @@ void CCamera::Update(GLFWwindow* _mainWindow, float _deltaTime)
 	//Ortho with top left as the anchor point
 	orthoMat = glm::ortho(0.0f, 800.f, 800.f, 0.0f, 0.1f, 4000.0f);
 }
-
-void CCamera::ProcessInput(GLFWwindow* _mainWindow, float _deltaTime)
+//Process input then move the camera
+void CCamera::ProcessInput(GLFWwindow* _mainWindow, float _deltaTime) 
 {
 	if (glfwGetKey(_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
 	{
@@ -44,5 +44,13 @@ void CCamera::ProcessInput(GLFWwindow* _mainWindow, float _deltaTime)
 	if (glfwGetKey(_mainWindow, GLFW_KEY_D) == GLFW_PRESS)
 	{
 		cameraPos += glm::vec3(1.0f, 0.0f, 0.0f) * _deltaTime;
+	}
+	if (glfwGetKey(_mainWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		cameraPos += glm::vec3(0.0f, 1.0f, 0.0f) * _deltaTime;
+	}
+	if (glfwGetKey(_mainWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	{
+		cameraPos += glm::vec3(0.0f, -1.0f, 0.0f) * _deltaTime;
 	}
 }
