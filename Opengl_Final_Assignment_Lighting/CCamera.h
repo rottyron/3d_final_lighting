@@ -26,5 +26,8 @@ private:
 	glm::vec3 cameraTargetPos;
 	glm::vec3 cameraUpDir;
 
+	//camspeed 
+	const float camSpeed = 10.0f;
+
 };
 

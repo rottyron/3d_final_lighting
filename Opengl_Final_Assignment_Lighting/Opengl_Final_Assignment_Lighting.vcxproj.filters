@@ -82,5 +82,14 @@
     <None Include="assets\shaders\3dLight_BlinnPhongRim.fs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="assets\shaders\3dColorRed.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\3dColorBlue.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\3dReflect.fs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

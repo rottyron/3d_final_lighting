@@ -1,5 +1,12 @@
 #include "CSphereMesh.h"
 
+CSphereMesh::CSphereMesh()
+{
+	objPosition = glm::vec3(0.0f, 0.f, 0.f);
+	objAngle = 0.0f;
+	objScale = glm::vec3(1.f);
+}
+
 CSphereMesh::CSphereMesh(std::string _texture)
 {
 	objPosition = glm::vec3(0.0f,0.f,0.f);

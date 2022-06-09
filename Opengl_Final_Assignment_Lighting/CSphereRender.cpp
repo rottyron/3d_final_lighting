@@ -115,6 +115,7 @@ CSphereRender::CSphereRender(float _radius, int _fidelity)
 	glBufferData(GL_ARRAY_BUFFER, VertexCount * sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
 
 	// Vertex Information (Position, Texture Coords and Normals)
+	//position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
 	//tex coords
@@ -155,28 +156,6 @@ void CSphereRender::Render(glm::mat4* _modelMat, glm::mat4* _PVM)
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
-
-//Render the sphere with a custom texture
-void CSphereRender::Render(GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM)
-{
-	glUseProgram(sphereProg);
-	glBindVertexArray(VAO);
-	//Texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, *_texture);
-	glUniform1i(glGetUniformLocation(sphereProg, "Texture_1"), 0);
-	//Model matrix application
-	GLint modelMatLoc = glGetUniformLocation(sphereProg, "Model");
-	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_modelMat));
-
-	GLint PVMMatLoc = glGetUniformLocation(sphereProg, "PVM");
-	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
-
-	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindVertexArray(0);
-	glUseProgram(0);
-}
 //Render the sphere with a custom shader and a custom texture
 void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM)
 {
@@ -192,10 +171,26 @@ void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat
 	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
 	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
 
-	lights->PassPointLights(_prog);
+	lights->PassLights(_prog);
 
 	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void CSphereRender::Render(GLuint* _prog, glm::mat4* _modelMat, glm::mat4* _PVM)
+{
+	glUseProgram(*_prog);
+	glBindVertexArray(VAO);
+	//Model matrix application
+	GLint modelMatLoc = glGetUniformLocation(*_prog, "Model");
+	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_modelMat));
+
+	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
+	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
+
+	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glUseProgram(0);
 }

@@ -15,8 +15,8 @@ GLFWwindow* mainWindow;
 CSphereRender* sphereRender;
 std::vector<CSphereMesh*> spheres;
 //SphereMesh 1
-CSphereMesh* sphereMesh_1;
-CSphereMesh* sphereMesh_2;
+CSphereMesh* sphereMesh_1; //Used to rep point light Red
+CSphereMesh* sphereMesh_2; //Used to rep point light Blue
 CCamera* mainCamera;
 
 CTimeManager* timeManager;
@@ -65,8 +65,13 @@ void InitialSetup()
 			spheres.push_back(new CSphereMesh("assets/textures/jerma.jpg"));
 		}
 		spheres.push_back(new CSphereMesh("assets/textures/Kronk.jpg"));
-		spheres[i]->setObjPos(rand() % 15, rand() % 15, rand() % 15);
+		spheres[i]->setObjPos(rand() % 30 - 15.0f, rand() % 30 - 15.0f, rand() % 30 - 15.0f);
 	}
+	//Blue SphereMesh to represent point light
+	sphereMesh_1 = new CSphereMesh();
+	sphereMesh_1->setObjPos(-4.0f, 6.0f, 0.0f);
+	sphereMesh_2 = new CSphereMesh();
+	sphereMesh_2->setObjPos(4.0f, -6.0f, 0.0f);
 	mainCamera = new CCamera();
 	//skybox init, takes the camera pointer for creating pvms
 	skybox = new CSkybox(mainCamera);
@@ -114,6 +119,8 @@ void Update()
 			spheres[i]->Update(timeManager->GetDeltaTime());
 		}
 	}
+	sphereMesh_1->Update(timeManager->GetDeltaTime());
+	sphereMesh_2->Update(timeManager->GetDeltaTime());
 	skybox->Update(timeManager->GetDeltaTime());
 	managedLights->Update(timeManager->GetDeltaTime());
 
@@ -140,6 +147,12 @@ void Render()
 			}
 		}
 	}
+	//Orbs representing point lights
+	PVM = mainCamera->CreatePVM(sphereMesh_1->GetModel());
+	sphereRender->Render(sphereRender->GetSphereBlue(), sphereMesh_1->GetModel(), &PVM);
+
+	PVM = mainCamera->CreatePVM(sphereMesh_2->GetModel());
+	sphereRender->Render(sphereRender->GetSphereRed(), sphereMesh_2->GetModel(), &PVM);
 	skybox->Render();
 	glfwSwapBuffers(mainWindow);
 }

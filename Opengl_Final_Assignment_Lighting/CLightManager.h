@@ -6,7 +6,7 @@ public:
 	CLightManager();
 	~CLightManager();
 	void Update(float _deltaTime);
-	void PassPointLights(GLuint* _program);
+	void PassLights(GLuint* _program);
 private:
 	struct pointLight
 	{
@@ -28,6 +28,7 @@ private:
 	};
 	static const int MAX_POINT_LIGHTS = 4;
 	pointLight pointLights[MAX_POINT_LIGHTS];
+	directionalLight directLight;
 
 };
 

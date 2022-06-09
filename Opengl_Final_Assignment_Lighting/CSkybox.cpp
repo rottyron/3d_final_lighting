@@ -88,7 +88,7 @@ CSkybox::CSkybox(CCamera* _camera)
 
 	for (int i = 0; i < 6; i++)
 	{
-		std::string FullFilePath = "assets/textures/Cubemaps/MountainOutpost/" + filePaths[i];
+		std::string FullFilePath = "assets/textures/Cubemaps/HornstullsStrand/" + filePaths[i];
 		std::cout << FullFilePath << std::endl;
 		unsigned char* imageData = stbi_load(FullFilePath.c_str(), &imageWidth, &imageHeight, &imageComponents, 0);
 

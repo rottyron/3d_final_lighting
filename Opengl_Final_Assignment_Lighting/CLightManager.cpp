@@ -18,6 +18,11 @@ CLightManager::CLightManager()
 	pointLights[1].attenuationConstant = 1.0f;
 	pointLights[1].attenuationLinear = 0.022f;
 	pointLights[1].attenuationExponent = 0.0019f;
+
+	directLight.direction = glm::vec3(-1.0f, -1.0f, 0.0f);
+	directLight.color = glm::vec3(0.3f, 0.3f, 0.3f);
+	directLight.ambientStrength = 0.02f;
+	directLight.specularStrength = 1.0f;
 }
 
 CLightManager::~CLightManager()
@@ -29,7 +34,7 @@ void CLightManager::Update(float _deltaTime)
 
 }
 
-void CLightManager::PassPointLights(GLuint* _program)
+void CLightManager::PassLights(GLuint* _program)
 {
 	
 	//blue
@@ -51,6 +56,14 @@ void CLightManager::PassPointLights(GLuint* _program)
 	glUniform1f(glGetUniformLocation(*_program, "pointLights[1].attenuationConstant"), pointLights[1].attenuationConstant);
 	glUniform1f(glGetUniformLocation(*_program, "pointLights[1].attenuationLinear"), pointLights[1].attenuationLinear);
 	glUniform1f(glGetUniformLocation(*_program, "pointLights[1].attenuationExponent"), pointLights[1].attenuationExponent);
+
+	//directionalLight
+	glUniform3fv(glGetUniformLocation(*_program, "directLight.direction"), 1, glm::value_ptr(directLight.direction));
+	glUniform3fv(glGetUniformLocation(*_program, "directLight.color"), 1, glm::value_ptr(directLight.color));
+	glUniform1f(glGetUniformLocation(*_program, "directLight.ambientStrength"), directLight.ambientStrength);
+	glUniform1f(glGetUniformLocation(*_program, "directLight.specularStrength"), directLight.specularStrength);
+
+
 
 
 }

@@ -29,28 +29,31 @@ void CCamera::Update(GLFWwindow* _mainWindow, float _deltaTime)
 //Process input then move the camera
 void CCamera::ProcessInput(GLFWwindow* _mainWindow, float _deltaTime) 
 {
+
 	if (glfwGetKey(_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(0.0f, 0.0f, -1.0f) * _deltaTime;
+		cameraPos +=  glm::normalize(cameraLookDir) * camSpeed * _deltaTime; //using look dir as forward vector
 	}
 	if (glfwGetKey(_mainWindow, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(0.0f, 0.0f, 1.0f) * _deltaTime;
+		cameraPos -= glm::normalize(cameraLookDir) * camSpeed * _deltaTime; //using look dir as forward vector
 	}	
 	if (glfwGetKey(_mainWindow, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(-1.0f, 0.0f, 0.0f) * _deltaTime;
+		//need a vector for strafe, so a vector prependicular between the up and the look dir should suffice, use a dot product to get that
+		cameraPos -= glm::normalize(glm::cross(cameraLookDir, cameraUpDir)) * camSpeed * _deltaTime; 
 	}	
 	if (glfwGetKey(_mainWindow, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(1.0f, 0.0f, 0.0f) * _deltaTime;
+		//need a vector for strafe, so a vector prependicular between the up and the look dir should suffice, use a dot product to get that
+		cameraPos += glm::normalize(glm::cross(cameraLookDir, cameraUpDir)) * camSpeed * _deltaTime;
 	}
 	if (glfwGetKey(_mainWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(0.0f, 1.0f, 0.0f) * _deltaTime;
+		cameraPos += glm::normalize(cameraUpDir) * camSpeed * _deltaTime;
 	}
 	if (glfwGetKey(_mainWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		cameraPos += glm::vec3(0.0f, -1.0f, 0.0f) * _deltaTime;
+		cameraPos -= glm::normalize(cameraUpDir) * camSpeed * _deltaTime;
 	}
 }

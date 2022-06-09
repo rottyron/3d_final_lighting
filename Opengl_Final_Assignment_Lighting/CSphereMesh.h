@@ -4,6 +4,7 @@
 class CSphereMesh
 {
 public:
+	CSphereMesh();
 	CSphereMesh(std::string _texture);
 	~CSphereMesh();
 	void Update(float _deltaTime);
@@ -25,5 +26,6 @@ private:
 	int imageWidth = 0;
 	int imageHeight = 0;
 	int	imageComponents = 0;
+
 };
 
