@@ -1,8 +1,24 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CSphereRender.cpp
+// Description : Holds the mesh of the Spheres and also applies the rendering function on them
+//
+// Author : James Koster-Smtih
+// Mail : james.kostersmith@mediadesignschool.com
+//
+
 #include "CSphereRender.h"
 #include "CLightManager.h"
 
 CLightManager* lights = new CLightManager();
 
+//Initialiser
 CSphereRender::CSphereRender(float _radius, int _fidelity)
 {
 	int VertexAttrib = 8;	// Float components are needed for each vertex point
@@ -132,46 +148,29 @@ CSphereRender::CSphereRender(float _radius, int _fidelity)
 	delete[] Indices;
 }
 
+//desturctor
 CSphereRender::~CSphereRender()
 {
+	delete lights;
 }
 
-//Render the sphere with the minimum reqs
-void CSphereRender::Render(glm::mat4* _modelMat, glm::mat4* _PVM)
-{
-	glUseProgram(sphereProg);
-	glBindVertexArray(VAO);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(sphereProg, "Texture_1"), 0);
-	//Model matrix application
-	GLint modelMatLoc = glGetUniformLocation(sphereProg, "Model");
-	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_modelMat));
-
-	GLint PVMMatLoc = glGetUniformLocation(sphereProg, "PVM");
-	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
-
-	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindVertexArray(0);
-	glUseProgram(0);
-}
 //Render the sphere with a custom shader and a custom texture
-void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM)
+void CSphereRender::Render(GLuint* _prog, CSpherePosition* _sphere, CCamera* _mainCam)
 {
 	glUseProgram(*_prog);
 	glBindVertexArray(VAO);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, *_texture);
+	glBindTexture(GL_TEXTURE_2D, *_sphere->GetTexture());
 	glUniform1i(glGetUniformLocation(*_prog, "Texture_1"), 0);
 	//Model matrix application
 	GLint modelMatLoc = glGetUniformLocation(*_prog, "Model");
-	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_modelMat));
+	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_sphere->GetModel()));
 
 	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
-	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(*_PVM));
+	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(_mainCam->CreatePVM(_sphere->GetModel())));
 
 	lights->PassLights(_prog);
+	_mainCam->PassCameraPos(_prog);
 
 	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -179,6 +178,60 @@ void CSphereRender::Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat
 	glUseProgram(0);
 }
 
+//Render for the Rim Setup on the sphere
+void CSphereRender::RenderRim(GLuint* _prog, CSpherePosition* _sphere, CCamera* _mainCam)
+{
+	glUseProgram(*_prog);
+	glBindVertexArray(VAO);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, *_sphere->GetTexture());
+	glUniform1i(glGetUniformLocation(*_prog, "Texture_1"), 0);
+	//Model matrix application
+	GLint modelMatLoc = glGetUniformLocation(*_prog, "Model");
+	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_sphere->GetModel()));
+
+	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
+	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(_mainCam->CreatePVM(_sphere->GetModel())));
+
+	lights->PassRimLights(_prog);
+	_mainCam->PassCameraPos(_prog);
+
+	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+//Render the sphere with a custom shader and a custom texture
+void CSphereRender::RenderReflect(GLuint* _prog, GLuint* _skyTexture, CSpherePosition* _sphere, CCamera* _mainCamera)
+{
+	glUseProgram(*_prog);
+	glBindVertexArray(VAO);
+	//texture 1
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, *_sphere->GetTexture());
+	glUniform1i(glGetUniformLocation(*_prog, "ImageTexture0"), 0);
+	//texture 0
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *_skyTexture);
+	glUniform1i(glGetUniformLocation(*_prog, "ImageTexture1"), 1);
+	//Model matrix application
+	GLint modelMatLoc = glGetUniformLocation(*_prog, "Model");
+	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(*_sphere->GetModel()));
+
+	GLint PVMMatLoc = glGetUniformLocation(*_prog, "PVM");
+	glUniformMatrix4fv(PVMMatLoc, 1, GL_FALSE, glm::value_ptr(_mainCamera->CreatePVM(_sphere->GetModel())));
+
+	lights->PassLights(_prog);
+	_mainCamera->PassCameraPos(_prog);
+
+	glDrawElements(drawType, indexCount, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+//Render for the base non affected by light spheres *point light representatives
 void CSphereRender::Render(GLuint* _prog, glm::mat4* _modelMat, glm::mat4* _PVM)
 {
 	glUseProgram(*_prog);

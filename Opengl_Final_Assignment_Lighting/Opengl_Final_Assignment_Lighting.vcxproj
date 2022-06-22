@@ -150,7 +150,7 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CLightManager.cpp" />
     <ClCompile Include="CSkybox.cpp" />
-    <ClCompile Include="CSphereMesh.cpp" />
+    <ClCompile Include="CSpherePosition.cpp" />
     <ClCompile Include="CSphereRender.cpp" />
     <ClCompile Include="CTimeManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CLightManager.h" />
     <ClInclude Include="CSkybox.h" />
-    <ClInclude Include="CSphereMesh.h" />
+    <ClInclude Include="CSpherePosition.h" />
     <ClInclude Include="CSphereRender.h" />
     <ClInclude Include="CTimeManager.h" />
     <ClInclude Include="includeStorage.h" />

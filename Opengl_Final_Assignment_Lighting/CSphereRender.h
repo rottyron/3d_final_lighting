@@ -1,28 +1,51 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CSphereRender.h
+// Description : Header for the sphere Render
+//
+// Author : James Koster-Smtih
+// Mail : james.kostersmith@mediadesignschool.com
+//
+
 #pragma once
 #include "includeStorage.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <math.h>
+#include "CCamera.h"
+#include "CSpherePosition.h"
 //Holds the VAO VBO and EBO and renders the target
 class CSphereRender
 {
 public:
+	//Initializer
 	CSphereRender(float _radius, int _fidelity);
+	//Desturctor
 	~CSphereRender();
-	//Render using the default program, and debug texture
-	void Render(glm::mat4* _modelMat, glm::mat4* _PVM);
 	//Render an orb, no texture only color
 	void Render(GLuint* _prog, glm::mat4* _modelMat, glm::mat4* _PVM);
-	//Render using an overloaded program, and texture
-	void Render(GLuint* _prog, GLuint* _texture, glm::mat4* _modelMat, glm::mat4* _PVM);
+	//Render using an overloaded program, and texture and camera
+	void Render(GLuint* _prog, CSpherePosition* _sphere, CCamera* _mainCam);\
+	//Render RimLightOrbs
+	void RenderRim(GLuint* _prog, CSpherePosition* _sphere, CCamera* _mainCam);
+	//Render using an overloaded program, and texture, camera and cubemap
+	void RenderReflect(GLuint* _prog, GLuint* _skyTexture, CSpherePosition* _sphere, CCamera* _mainCamera);
+	//Getters
 	GLuint* GetVAO() { return &VAO; } //for collecting the vao
-	GLuint* GetSphereProg() { return &sphereProg; }
-	GLuint* GetRimProg() { return &sphereRimProg; }
-	GLuint* GetSphereRed() { return &sphereRed; }
-	GLuint* GetSphereBlue() { return &sphereBlue; }
-	GLuint* GetSphereReflect() { return &sphereReflect; }
+	GLuint* GetSphereProg() {return &sphereProg;}
+	GLuint* GetRimProg() {return &sphereRimProg;}
+	GLuint* GetSphereRed() {return &sphereRed;}
+	GLuint* GetSphereBlue() {return &sphereBlue;}
+	GLuint* GetSphereReflect() {return &sphereReflect;}
 
 private:
+	//Generic variables
 	GLuint VAO;
 	int indexCount;
 	int drawType;

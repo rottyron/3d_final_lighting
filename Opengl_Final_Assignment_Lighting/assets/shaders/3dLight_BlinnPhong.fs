@@ -1,5 +1,21 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : 3dLight_BlinnPhone.fs
+// Description : fragment shader that handles most of the orbs lighting, all the generic ones
+//
+// Author : James Koster-Smtih
+// Mail : james.kostersmith@mediadesignschool.com
+//
+
 #version 460 core
 #define MAX_POINT_LIGHTS 4
+
 struct pointLight
 {
 	vec3 position;
@@ -52,8 +68,6 @@ vec3 CalculateLight_Point(pointLight _light)
 	
 	//Specula stuff
 	vec3 ReverseViewDir = normalize(CameraPos - FragPos);
-
-	//Blin phong model
 	vec3 HalfwayVector = normalize(-LightDir + ReverseViewDir);
 	float SpecularReflectivity = pow(max(dot(Normal, HalfwayVector), 0.0f), Shininess);
 
@@ -100,8 +114,6 @@ vec3 CalculateDirectionalLight(directionalLight _light)
 	vec3 combinedLight = Ambient + Diffuse + Specular;
 
 	return combinedLight;
-
-
 }
 
 //Main

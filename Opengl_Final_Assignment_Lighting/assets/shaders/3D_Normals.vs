@@ -1,3 +1,18 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : 3D_Normals.vs
+// Description : vertex shader to calc and sort out normals of the camera pvm and the model matrix
+//
+// Author : James Koster-Smtih
+// Mail : james.kostersmith@mediadesignschool.com
+//
+
 #version 460 core
 
 //vertex stoof

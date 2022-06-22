@@ -1,3 +1,18 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CSkybox.cpp
+// Description : Handles the skybox functions and returns, also renders it
+//
+// Author : James Koster-Smtih
+// Mail : james.kostersmith@mediadesignschool.com
+//
+
 #include "CSkybox.h"
 
 CSkybox::CSkybox(CCamera* _camera)
@@ -45,6 +60,7 @@ CSkybox::CSkybox(CCamera* _camera)
 
 	};
 
+	//Indicies reversed
 	GLuint Indicies[] = {
 		0,	2,	1,	//Front Tri 1
 		0,	3,	2,	//Front Tri 2
@@ -62,13 +78,13 @@ CSkybox::CSkybox(CCamera* _camera)
 	};
 	//Get the size of the indices for later
 	indiciesSize = sizeof(Indicies) / 4;
-
-	filePaths[0] = "Right.jpg";
-	filePaths[1] = "Left.jpg";
-	filePaths[2] = "Up.jpg";
-	filePaths[3] = "Down.jpg";
-	filePaths[4] = "Back.jpg";
-	filePaths[5] = "Front.jpg";
+	//File paths
+	filePaths[0] = "right.jpg";
+	filePaths[1] = "left.jpg";
+	filePaths[2] = "up.jpg";
+	filePaths[3] = "down.jpg";
+	filePaths[4] = "back.jpg";
+	filePaths[5] = "front.jpg";
 	GL_TEXTURE_CUBE_MAP_POSITIVE_X;	//right
 	GL_TEXTURE_CUBE_MAP_NEGATIVE_X;	//LEFT
 	GL_TEXTURE_CUBE_MAP_POSITIVE_Y; //TOP
@@ -134,16 +150,19 @@ CSkybox::CSkybox(CCamera* _camera)
 
 }
 
+//desturctor
 CSkybox::~CSkybox()
 {
 }
 
+//updates per frame yada yada
 void CSkybox::Update(float _deltaTime)
 {
 	modelMat = glm::scale(glm::mat4(), glm::vec3(2000.0f, 2000.0f, 2000.0f));
 	PVM = cam->CreatePVM(&modelMat);
 }
 
+//Render function
 void CSkybox::Render()
 {
 	glUseProgram(skyboxProg);
